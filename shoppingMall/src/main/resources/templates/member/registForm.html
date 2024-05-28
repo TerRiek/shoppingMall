@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>회원가입</h1>
+	<form action="/user/regist" method="post">
+		<input type="text" placeholder="아이디" name="username">
+		<input type="password" placeholder="비밀번호" name="password">
+		<input type="password" placeholder="비밀번호 확인">
+		<input type="email" placeholder="aaa@gmail.com" name="email">
+		<select name="internationalNumber">
+			<option value="+82">+82</option>
+		</select>
+		<input type="tel" placeholder="111-1111-1111" name="telephone">
+		<input type="button" value="인증번호 보내기">
+		<input type="text" placeholder="인증번호">
+		<input type="button" value="인증번호 확인">
+		<input type="submit" value="회원가입">
+		
+	</form>
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+</body>
+</html>

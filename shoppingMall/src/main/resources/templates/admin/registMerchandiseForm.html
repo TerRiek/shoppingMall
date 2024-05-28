@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>IndexAdmin</h1>
+	
+	
+	<form action="/admin/registMerchandise" method="post" encType="multipart/form-data">
+	<input type="text" name="code" placeholder="코드">
+	<input type="text" name="name" placeholder="이름">
+	<input type="text" name="company_name" placeholder="회사명">
+	<input type="text" name="type" placeholder="종류">
+	<input type="text" name=" buyprice" placeholder="구매가격">
+	<input type="text" name="sellprice" placeholder="판매가격">
+	<input type="submit" value="등록">
+	</form>
+	
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+</body>
+</html>

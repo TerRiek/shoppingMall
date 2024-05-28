@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>상품 상세 페이지</h1>
+	
+	<form action="/admin/update" method="post">
+	<table border="1">
+		<tbody>
+			<tr>
+				<td></td>
+				<td><input type="hidden" name="mno" th:value="${merchandiseDetail.mno}"></td>
+			</tr>
+			<tr>
+				<td>이미지</td>
+				<td><img alt="상품 사진" th:src="@{/merchandiseDetail.img}"></td>
+			</tr>
+			<tr>
+				<td>코드</td>
+				<td><input type="text" name="code" th:value="${merchandiseDetail.code}"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="name" th:value="${merchandiseDetail.name}"></td>
+			</tr>	
+			<tr>
+				<td>종류</td>
+				<td><input type="text" name="type" th:value="${merchandiseDetail.type}"></td>
+			</tr>
+			<tr>
+				<td>매입가격</td>
+				<td><input type="text" name="buyprice" th:value="${merchandiseDetail.buyprice}"></td>
+			</tr>
+			<tr>
+				<td>판매가격</td>
+				<td><input type="text" name="sellprice" th:value="${merchandiseDetail.sellprice}"></td>
+			</tr>
+			<tr>
+				<td>회사</td>
+				<td><input type="text" name="company_name" th:value="${merchandiseDetail.company_name}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<input type="submit" value="저장">
+	<input type="button" value="삭제" th:onclick="|location.href='@{/admin/delete(mno=${merchandiseDetail.mno})}'|">
+	</form>
+	
+	
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+
+</body>
+</html>

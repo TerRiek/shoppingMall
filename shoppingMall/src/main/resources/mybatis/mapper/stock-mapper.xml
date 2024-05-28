@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.green.shoppingMall.dao.IStockDAO">
+  <select id="findOrderByOrderdatetimeDesc" resultType="com.green.shoppingMall.domain.StockDetail">
+		SELECT s.sno, SUM(s.amount) AS amount, s.arrivedatetime, max(s.orderdatetime), s.uno, s.mno, m.buyprice, m.code, m.company_name, m.name, m.sellprice,
+ m.type
+FROM stock s INNER JOIN merchandise m ON s.mno = m.mno GROUP BY s.mno ORDER BY max(s.orderdatetime) DESC LIMIT 5;
+		
+  </select>
+</mapper>

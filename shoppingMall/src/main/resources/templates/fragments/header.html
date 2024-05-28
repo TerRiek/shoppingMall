@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<header th:fragment="header">
+		<th:block th:if="${session.member == null && session.admin == null}">
+		<a th:href="@{/user/loginForm}">로그인</a>
+		<a th:href="@{/user/registForm}">회원가입</a>
+		</th:block>
+		<th:block th:if="${session.member != null}">
+		<a th:href="@{/user/registForm}">[[${member.username}]]님 환영합니다.</a>
+		<a th:href="@{/user/logout}">로그아웃</a>
+		</th:block>
+		<th:block th:if="${session.admin != null}">
+		<a th:href="@{/user/registForm}">[[${session.admin.username}]]님 환영합니다.</a>
+		<a th:href="@{/user/logout}">로그아웃</a>
+		</th:block>
+	</header>
+	
+</body>
+</html>

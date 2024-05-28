@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>로그인</h1>
+	<form action="/user/login" method="post">
+		<input type="text" placeholder="아이디" name="username">
+		<input type="password" placeholder="비밀번호" name="password">
+		<input type="submit" value="로그인">
+		
+	</form>
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+</body>
+</html>

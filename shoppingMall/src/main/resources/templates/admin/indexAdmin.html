@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+	<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>IndexAdmin</h1>
+	
+	<input type="button" value="상품 조회" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
+	<input type="button" value="상품 등록" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
+	<input type="button" value="재고 조회" th:onclick="|location.href='@{/admin/getStockList}'|">
+	
+	<table border="1">
+		<thead>
+			<tr>
+				<th>코드</th>
+				<th>이름</th>
+				<th>구매가격</th>
+				<th>판매가격</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="merchandise : ${list}">
+				<td><a th:href="@{/admin/merchandiseDetail(mno=${merchandise.mno})}">[[${merchandise.mno.code}]]</a></td>
+				<td th:text="${merchandise.mno.name}"></td>
+				<td th:text="${merchandise.mno.buyprice}"></td>
+				<td th:text="${merchandise.mno.sellprice}"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+	
+</body>
+</html>

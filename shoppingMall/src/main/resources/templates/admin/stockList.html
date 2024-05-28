@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>IndexAdmin</h1>
+	
+	<input type="button" value="상품 조회" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
+	<input type="button" value="상품 등록" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
+	<input type="button" value="재고 조회" th:onclick="|location.href='@{/admin/getStockList}'|">
+	
+	<table border="1">
+		<thead>
+			<tr>
+				<th>코드</th>
+				<th>이름</th>
+				<th>회사이름</th>
+				<th>구매가격</th>
+				<th>판매가격</th>
+				<th>재고</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="stock : ${stockList}">
+				<td><a th:href="@{/admin/merchandiseDetail(mno=${stock.mno.mno})}">[[${stock.mno.code}]]</a></td>
+				<td th:text="${stock.mno.name}"></td>
+				<td th:text="${stock.mno.company_name}"></td>
+				<td th:text="${stock.mno.buyprice}"></td>
+				<td th:text="${stock.mno.sellprice}"></td>
+				<td th:text="${stock.amount}"></td>
+				<td><input type="button" value="재고 주문" th:onclick="|location.href='@{/admin/orderStockForm(mno=${stock.mno.mno})}'|"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+</body>
+</html>

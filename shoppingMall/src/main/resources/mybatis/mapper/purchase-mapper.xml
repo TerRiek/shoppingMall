@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.green.shoppingMall.dao.IPurchaseDAO">
+  <select id="findGroupByMnoOrderByAmountDesc" resultType="com.green.shoppingMall.domain.PurchaseDetail">
+		SELECT p.pno, SUM(p.amount) as amount, p.regdatetime, p.cno, p.dno, p.mno, m.code, m.name, m.type, m.buyprice, m.sellprice, m.company_name
+		 FROM purchase p INNER JOIN merchandise m on p.mno = m.mno GROUP BY p.mno ORDER BY SUM(p.amount) DESC LIMIT 5;
+  </select>
+</mapper>
+
