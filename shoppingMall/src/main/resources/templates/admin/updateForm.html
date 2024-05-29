@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
 <body>
 <header>
@@ -10,16 +11,16 @@
 	</header>
 	<h1>상품 상세 페이지</h1>
 	
-	<form action="/admin/update" method="post">
+	<form action="/admin/update" method="post" encType="multipart/form-data">
 	<table border="1">
 		<tbody>
-			<tr>
+			<tr style="display:none">
 				<td></td>
 				<td><input type="hidden" name="mno" th:value="${merchandiseDetail.mno}"></td>
 			</tr>
 			<tr>
 				<td>이미지</td>
-				<td><img alt="상품 사진" th:src="@{/merchandiseDetail.img}"></td>
+				<td><img alt="상품 사진" th:src="@{${merchandiseDetail.imgPath}}" onerror="this.src='/upload/noimage.png'"></td>
 			</tr>
 			<tr>
 				<td>코드</td>
@@ -47,6 +48,7 @@
 			</tr>
 		</tbody>
 	</table>
+	<input type="file" name="file" th:value="${merchandiseDetail.imgPath}">
 	<input type="submit" value="저장">
 	<input type="button" value="삭제" th:onclick="|location.href='@{/admin/delete(mno=${merchandiseDetail.mno})}'|">
 	</form>

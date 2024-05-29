@@ -3,26 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	form{
+		display: flex;
+		flex-direction: column;
+		width: 250px;
+		margin: 0 auto;
+	}
+	form input{
+		margin: 5px 0;
+		padding: 5px;
+	}
+	input[type="submit"]{
+		background: #4a8df7;
+		color: white;
+	}
+</style>
 </head>
 <body>
 <header>
 	<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
-	<h1>IndexAdmin</h1>
+	<h1>상품 등록 페이지</h1>
 	
 	
 	<form action="/admin/registMerchandise" method="post" encType="multipart/form-data">
-	<input type="text" name="code" placeholder="코드">
-	<input type="text" name="name" placeholder="이름">
-	<input type="text" name="company_name" placeholder="회사명">
-	<input type="text" name="type" placeholder="종류">
-	<input type="text" name=" buyprice" placeholder="구매가격">
-	<input type="text" name="sellprice" placeholder="판매가격">
-	<input type="submit" value="등록">
+	<input type="file" id="file" name="file">
+	<input type="text" id="code" name="code" placeholder="코드">
+	<input type="text" id="name" name="name" placeholder="이름">
+	<input type="text" id="company_name" name="company_name" placeholder="회사명">
+	<input type="text" id="type" name="type" placeholder="종류">
+	<input type="text" id="buyprice" name=" buyprice" placeholder="구매가격">
+	<input type="text" id="sellprice" name="sellprice" placeholder="판매가격">
+	<input type="submit" value="등록" onclick="return checkValidation()">
 	</form>
 	
 	<footer>
 	<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>
+	
+	<script type="text/javascript">
+		function checkValidation(){
+			const file = document.querySelector("#file");
+			if(file.value === ""){
+				alert('파일이 입력되지 않았습니다');
+				file.focus();
+				return false;
+			}
+			const code = document.querySelector("#code");
+			if(code.value === ""){
+				alert('코드가 입력되지 않았습니다');
+				code.focus();
+				return false;
+			}
+			const name = document.querySelector("#name");
+			if(name.value === ""){
+				alert('이름이 입력되지 않았습니다');
+				name.focus();
+				return false;
+			}
+			const company_name = document.querySelector("#company_name");
+			if(company_name.value === ""){
+				alert('회사가 입력되지 않았습니다');
+				company_name.focus();
+				return false;
+			}
+			const type = document.querySelector("#type");
+			if(type.value === ""){
+				alert('종류가 입력되지 않았습니다');
+				type.focus();
+				return false;
+			}
+			const pattern_num = /[0-9]/;
+			const buyprice = document.querySelector("#buyprice");
+			if(buyprice.value === ""){
+				alert('구매가격이 입력되지 않았습니다');
+				buyprice.focus();
+				return false;
+			}
+			if(!pattern_num.test(buyprice.value)){
+				alert("구매가격은 숫자만 입력 가능합니다");
+				buyprice.focus();
+				return false;
+			}
+			const sellprice = document.querySelector("#sellprice");
+			if(sellprice.value === ""){
+				alert('판매가격이 입력되지 않았습니다');
+				sellprice.focus();
+				return false;
+			}
+			if(!pattern_num.test(sellprice.value)){
+				alert("판매가격은 숫자만 입력 가능합니다");
+				sellprice.focus();
+				return false;
+			}
+			return true;
+		}
+	</script>
 </body>
 </html>

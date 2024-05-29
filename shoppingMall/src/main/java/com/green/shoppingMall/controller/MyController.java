@@ -28,6 +28,14 @@ public class MyController {
 	public String index(Model model) {
 		
 		List<PurchaseDetail> popularList = purchaseDao.findGroupByMnoOrderByAmountDesc();
+		
+		for(int i = 0; i < popularList.size(); i++) {
+			Long amount = stockDao.getAmount(popularList.get(i).getMno());
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+			
+			popularList.get(i).setAmount(amount);
+		}
+		
 		if(popularList.size() > 0) {
 			model.addAttribute("popularList", popularList);
 		}

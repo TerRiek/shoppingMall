@@ -26,5 +26,5 @@ public class StockDetail {
 	private int buyprice;
 	private int sellprice;
 	private String company_name;
-	private String img;
+	private String imgPath;
 }

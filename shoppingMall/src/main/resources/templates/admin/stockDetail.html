@@ -3,6 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	table{
+		border-collapse: collapse;
+		margin: 0 auto;
+		width: fit-content;
+	}
+	form{
+		margin-top: 5px;
+		width: fit-content;
+		margin: 0 auto;
+	}
+	form input{
+		padding: 5px;
+	}
+	input[type="submit"]{
+		background: #4a8df7;
+		color: white;
+	}
+</style>
 </head>
 <body>
 <header>
@@ -10,46 +30,51 @@
 	</header>
 	<h1>IndexAdmin</h1>
 	
-	<input type="button" value="상품 조회" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="상품 등록" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="재고 조회" th:onclick="|location.href='@{/admin/getStockList}'|">
-	
 	<table border="1">
 		<tbody>
-			<tr>
+			<tr style="display:none;">
 				<td></td>
-				<td><input type="hidden" name="mno" th:value="${merchandiseDetail.mno}"></td>
+				<td th:text="${stockDetail.mno.mno}"></td>
 			</tr>
 			<tr>
 				<td>이미지</td>
-				<td><img alt="상품 사진" th:src="@{/merchandiseDetail.img}"></td>
+				<td><img alt="상품 사진" th:src="@{${stockDetail.mno.imgPath}}"></td>
 			</tr>
 			<tr>
 				<td>코드</td>
-				<td><input type="text" name="code" th:value="${merchandiseDetail.code}"></td>
+				<td th:text="${stockDetail.mno.code}"></td>
 			</tr>
 			<tr>
 				<td>이름</td>
-				<td><input type="text" name="name" th:value="${merchandiseDetail.name}"></td>
+				<td th:text="${stockDetail.mno.name}"></td>
 			</tr>	
 			<tr>
 				<td>종류</td>
-				<td><input type="text" name="type" th:value="${merchandiseDetail.type}"></td>
+				<td th:text="${stockDetail.mno.type}"></td>
 			</tr>
 			<tr>
 				<td>매입가격</td>
-				<td><input type="text" name="buyprice" th:value="${merchandiseDetail.buyprice}"></td>
+				<td th:text="${stockDetail.mno.buyprice}"></td>
 			</tr>
 			<tr>
 				<td>판매가격</td>
-				<td><input type="text" name="sellprice" th:value="${merchandiseDetail.sellprice}"></td>
+				<td th:text="${stockDetail.mno.sellprice}"></td>
 			</tr>
 			<tr>
 				<td>회사</td>
-				<td><input type="text" name="company_name" th:value="${merchandiseDetail.company_name}"></td>
+				<td th:text="${stockDetail.mno.company_name}"></td>
+			</tr>
+			<tr>
+				<td>재고</td>
+				<td th:text="${stockDetail.amount}"></td>
 			</tr>
 		</tbody>
 	</table>
+	<form action="/admin/orderStock" method="post">
+		<input type="hidden" name="mno" th:value="${stockDetail.mno.mno}">
+		<input type="number" placeholder="주문 수량" name="amount" value="0">
+		<input type="submit" value="주문하기">
+	</form>
 	<footer>
 	<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>

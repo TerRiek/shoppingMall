@@ -3,6 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	table{
+		margin: 0 auto;
+		width: fit-content;
+		border-collapse: collapse;
+	}
+	td{
+		padding: 5px 20px;
+	}
+	#btns{
+		margin-top: 20px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		margin: 0 auto;
+		width: fit-content;
+	}
+	#btns input{
+		margin: 0 10px;
+		background: #4a8df7;
+		color: white;
+		padding: 5px;
+	}
+</style>
 </head>
 <body>
 	
@@ -15,7 +40,7 @@
 		<tbody>
 			<tr>
 				<td>이미지</td>
-				<td><img alt="상품 사진" th:src="@{/merchandiseDetail.img}"></td>
+				<td><img alt="상품 사진" th:src="@{${merchandiseDetail.imgPath}}"></td>
 			</tr>
 			<tr>
 				<td>코드</td>
@@ -43,9 +68,11 @@
 			</tr>
 		</tbody>
 	</table>
-	
+	<div id="btns">
 	<input type="button" value="수정" th:onclick="|location.href='@{/admin/updateForm(mno=${merchandiseDetail.mno})}'|">
 	<input type="button" value="삭제" th:onclick="|location.href='@{/admin/delete(mno=${merchandiseDetail.mno})}'|">
+	<input type="button" value="재고 주문" th:onclick="|location.href='@{/admin/orderStockForm(mno=${merchandiseDetail.mno})}'|">
+	</div>
 	
 	<footer>
 	<th:block th:insert="~{/fragments/footer.html :: footer}">

@@ -3,20 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+form {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	width: 250px;
+}
+
+form input {
+	padding: 5px;
+	margin: 5px 0;
+}
+
+input[type="button"], input[type="submit"] {
+	background: #4a8df7;
+	color: white;
+}
+</style>
 </head>
 <body>
 	<header>
-	<th:block th:insert="~{/fragments/header.html :: header}">
+		<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
 	<h1>로그인</h1>
 	<form action="/user/login" method="post">
-		<input type="text" placeholder="아이디" name="username">
-		<input type="password" placeholder="비밀번호" name="password">
-		<input type="submit" value="로그인">
-		
+		<input type="text" placeholder="아이디" name="username"> <input
+			type="password" placeholder="비밀번호" name="password"> <input
+			type="submit" value="로그인">
+
 	</form>
 	<footer>
-	<th:block th:insert="~{/fragments/footer.html :: footer}">
+		<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>
 </body>
 </html>

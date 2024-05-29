@@ -15,8 +15,8 @@ public interface StockRepository extends JpaRepository<Stock, Long>{
 	void deleteByMno(@Param("mno") Long mno);
 	
 	@Query(value="SELECT sno, SUM(amount) as amount, arrivedatetime, orderdatetime, uno, mno FROM stock GROUP BY mno ORDER BY SUM(amount) ASC", nativeQuery=true)
-	List<Stock> findAllOrderBySnoAsc();
+	List<Stock> findAllOrderByAmountAsc();
 	
-	@Query(value="sno, SUM(amount) as amount, arrivedatetime, orderdatetime, uno, mno FROM stock GROUP BY mno WHERE mno = :mno", nativeQuery = true)
+	@Query(value="SELECT sno, SUM(amount) as amount, arrivedatetime, orderdatetime, uno, mno FROM stock WHERE mno = :mno GROUP BY mno", nativeQuery = true)
 	Stock findByMno(@Param("mno") Long mno);
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	ul li{
+		list-style: none;
+	}
+	ul{
+		padding: 0;
+		border: 1px solid gray;
+		width: 200px;
+		margin: 10px;
+	}
+	#cartBox{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+</style>
+</head>
+<body>
+	<header>
+		<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<input type="checkbox" id="allChk" onclick="checkAll()">
+	<label for="allChk">전체선택</label>
+	<div id="cartBox">
+	<ul th:each="cart : ${cartList}">
+		<li><img alt="상품 사진" th:src="@{${cart.mno.imgPath}}"  onerror="this.src='/upload/noimage.png'"></li>
+		<li th:text="${cart.mno.name}"></li>
+		<li th:text="${cart.mno.sellprice}"></li>
+		<li><input type="number" th:value="${cart.amount}"></li>
+		<li><input type="checkbox" name="chk" onclick="uncheckAll()"></li>
+	</ul>
+	</div>
+	<input type="button" value="선택 삭제" id="${cart.mno}" onclick="deleteChecked()">
+	<input type="button" value="바로 구매" onclick="">
+
+	<footer>
+		<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+	<script type="text/javascript">
+		function checkAll(){
+			const chks = document.querySelectorAll("input[type='checkbox']");
+			chks.forEach(e =>{
+				const allChk = document.querySelector("#allChk");
+				if(allChk.checked === true){
+					e.checked = true;
+				}else {
+					e.checked = false;
+				}
+			});
+		}
+		
+		function uncheckAll(){
+			const allChk = document.querySelector("#allChk");
+			const checks = document.querySelectorAll("input[name='chk']:checked");
+			const unchecks = document.querySelectorAll("input[name='chk']");
+			if(checks.length === unchecks.length){
+				allChk.checked = true;
+			}else {
+				allChk.checked = false;
+			}
+		}
+		
+		function deleteChecked(){
+			const checked = document.querySelectorAll("input[name='chk']:checked");
+			
+			const str = JSON.stringify(checked);
+			console.log(str);
+		}
+	</script>
+</body>
+</html>

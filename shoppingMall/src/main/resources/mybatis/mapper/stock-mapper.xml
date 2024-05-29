@@ -6,8 +6,11 @@
 <mapper namespace="com.green.shoppingMall.dao.IStockDAO">
   <select id="findOrderByOrderdatetimeDesc" resultType="com.green.shoppingMall.domain.StockDetail">
 		SELECT s.sno, SUM(s.amount) AS amount, s.arrivedatetime, max(s.orderdatetime), s.uno, s.mno, m.buyprice, m.code, m.company_name, m.name, m.sellprice,
- m.type
+ m.type, m.img_path
 FROM stock s INNER JOIN merchandise m ON s.mno = m.mno GROUP BY s.mno ORDER BY max(s.orderdatetime) DESC LIMIT 5;
 		
+  </select>
+  <select id="getAmount">
+  	SELECT SUM(amount) FROM stock WHERE mno = #{mno} GROUP BY mno;
   </select>
 </mapper>

@@ -12,14 +12,35 @@
 		<a th:href="@{/user/registForm}">회원가입</a>
 		</th:block>
 		<th:block th:if="${session.member != null}">
-		<a th:href="@{/user/registForm}">[[${member.username}]]님 환영합니다.</a>
-		<a th:href="@{/user/logout}">로그아웃</a>
+		<nav>
+			<form action="#" method="get">
+			<input type="search" placeholder="검색" name="keyword">
+			<input type="submit" value="검색">
+			</form>
+			<ul>
+				<li><a th:href="@{/user/indexMember}">홈으로</a></li>
+				<li><a th:href="@{/merchandise/list}">전체 조회</a></li>
+				<li><a th:href="@{/cart/list}">장바구니 보러 가기()</a></li>
+				<li><a th:href="@{/delivery/manage}">배송지 설정하기</a></li>
+				<li><a th:href="@{/user/registForm}">[[${session.member.username}]]님 환영합니다.</a></li>
+				<li><a th:href="@{/user/logout}">로그아웃</a></li>
+			</ul>		
+		</nav>
+		
 		</th:block>
 		<th:block th:if="${session.admin != null}">
-		<a th:href="@{/user/registForm}">[[${session.admin.username}]]님 환영합니다.</a>
-		<a th:href="@{/user/logout}">로그아웃</a>
+		<nav>
+			<ul>
+				<li><a th:href="@{/admin/indexAdmin}">상품 조회</a></li>
+				<li><a th:href="@{/admin/registMerchandiseForm}">상품 등록</a></li>
+				<li><a th:href="@{/admin/getStockList}">재고 조회</a></li>
+				<li><a th:href="@{/user/registForm}">[[${session.admin.username}]]님 환영합니다.</a></li>
+				<li><a th:href="@{/user/logout}">로그아웃</a></li>
+			</ul>		
+		</nav>
 		</th:block>
 	</header>
 	
 </body>
 </html>
+

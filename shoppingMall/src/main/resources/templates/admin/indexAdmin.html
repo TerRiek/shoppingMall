@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	table{
+		border-collapse: collapse;
+		margin: 0 auto;
+		width: fit-content;
+	}
+	th, td{
+		padding: 5px 20px;
+	}
+	th{
+		background: yellow;
+	}
+</style>
 </head>
 <body>
 	<header>
@@ -11,25 +24,27 @@
 	</header>
 	<h1>IndexAdmin</h1>
 	
-	<input type="button" value="상품 조회" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="상품 등록" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="재고 조회" th:onclick="|location.href='@{/admin/getStockList}'|">
-	
 	<table border="1">
 		<thead>
 			<tr>
 				<th>코드</th>
+				<th>종류</th>
 				<th>이름</th>
+				<th>회사</th>
 				<th>구매가격</th>
 				<th>판매가격</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="merchandise : ${list}">
-				<td><a th:href="@{/admin/merchandiseDetail(mno=${merchandise.mno})}">[[${merchandise.mno.code}]]</a></td>
-				<td th:text="${merchandise.mno.name}"></td>
-				<td th:text="${merchandise.mno.buyprice}"></td>
-				<td th:text="${merchandise.mno.sellprice}"></td>
+				<td><a th:href="@{/admin/merchandiseDetail(mno=${merchandise.mno})}">[[${merchandise.code}]]</a></td>
+				<td th:text="${merchandise.type}"></td>
+				<td th:text="${merchandise.name}"></td>
+				<td th:text="${merchandise.company_name}"></td>
+				<td th:text="${merchandise.buyprice}"></td>
+				<td th:text="${merchandise.sellprice}"></td>
+				<td><input type="button" value="재고 주문" th:onclick="|location.href='@{/admin/orderStockForm(mno=${merchandise.mno})}'|"></td>
 			</tr>
 		</tbody>
 	</table>

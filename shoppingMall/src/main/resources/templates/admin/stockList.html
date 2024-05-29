@@ -3,16 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+table{
+		border-collapse: collapse;
+		margin: 0 auto;
+		width: fit-content;
+	}
+	th, td{
+		padding: 5px 20px;
+	}
+	th{
+		background: yellow;
+	}
+</style>
 </head>
 <body>
 <header>
 	<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
 	<h1>IndexAdmin</h1>
-	
-	<input type="button" value="상품 조회" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="상품 등록" th:onclick="|location.href='@{/admin/registMerchandiseForm}'|">
-	<input type="button" value="재고 조회" th:onclick="|location.href='@{/admin/getStockList}'|">
 	
 	<table border="1">
 		<thead>
@@ -33,7 +43,7 @@
 				<td th:text="${stock.mno.company_name}"></td>
 				<td th:text="${stock.mno.buyprice}"></td>
 				<td th:text="${stock.mno.sellprice}"></td>
-				<td th:text="${stock.amount}"></td>
+				<td th:text="${stock.amount > 0} ? ${stock.amount} : '재고 없음'"></td>
 				<td><input type="button" value="재고 주문" th:onclick="|location.href='@{/admin/orderStockForm(mno=${stock.mno.mno})}'|"></td>
 			</tr>
 		</tbody>

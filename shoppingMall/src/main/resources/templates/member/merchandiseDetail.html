@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<header>
+		<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>로그인</h1>
+	
+	<img alt="상품 사진" th:src="@{${merchandiseDetail.imgPath}}" onerror="this.src='/upload/noimage.png'">
+	
+	
+	<input th:if="${session.member != null}" type="number" th:value="1" name="amount">
+	<input th:if="${session.member != null}" type="submit" value="장바구니 추가" th:onclick="addCart()">
+	<input th:if="${session.member != null}" type="button" value="바로구매" th:onclick="purchase()">
+	
+	<footer>
+		<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+
+	<script type="text/javascript">
+		function addCart(){
+			const amount = document.querySelector("input[name='amount']");
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', '/cart/add', true);
+			 xhr.setRequestHeader("Content-type","application/json");
+			xhr.onload = function(){
+				alert(this.responseText);
+			}
+			const data = JSON.stringify({
+				mno : "[[${merchandiseDetail.mno}]]",
+				amount : amount.value
+			})
+			xhr.send(data);			
+		}
+		
+		function purchase(){
+			const tf = confirm("확실히 구매하시겠습니까?");
+			if(tf === true){
+			const amount = document.querySelector("input[name='amount']");
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', '/purchase/buy', true);
+			 xhr.setRequestHeader("Content-type","application/json");
+			xhr.onload = function(){
+				alert(this.responseText);
+			}
+			const data = JSON.stringify({
+				mno : "[[${merchandiseDetail.mno}]]",
+				amount : amount.value
+			})
+			xhr.send(data);			
+			}else {
+				return;
+			}
+		}
+		
+		function unsubscribe(sno, event){
+			const xhr = new XMLHttpRequest();
+			xhr.open("POST", "/company/unsubscribe2" , true);		
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function(){
+				const subsClass = document.querySelector(".subs" + sno);
+				console.log(subsClass.style.background);
+				if(subsClass.style.background == "rgb(252, 239, 169)"){
+					subsClass.style.background = "gray";
+				}else {
+					subsClass.style.background = "#fcefa9";
+				}
+			}
+			const data = JSON.stringify({
+				sno : sno,
+				cno : event.target.id
+			})
+			console.log(data);
+			xhr.send(data);
+		}
+	</script>
+</body>
+</html>
