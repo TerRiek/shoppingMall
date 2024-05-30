@@ -32,46 +32,42 @@
 	
 	<table border="1">
 		<tbody>
-			<tr style="display:none;">
-				<td></td>
-				<td th:text="${stockDetail.mno.mno}"></td>
-			</tr>
 			<tr>
 				<td>이미지</td>
-				<td><img alt="상품 사진" th:src="@{${stockDetail.mno.imgPath}}"></td>
+				<td><img alt="상품 사진" th:src="@{${merchandiseDetail.imgPath}}"></td>
 			</tr>
 			<tr>
 				<td>코드</td>
-				<td th:text="${stockDetail.mno.code}"></td>
+				<td th:text="${merchandiseDetail.code}"></td>
 			</tr>
 			<tr>
 				<td>이름</td>
-				<td th:text="${stockDetail.mno.name}"></td>
+				<td th:text="${merchandiseDetail.name}"></td>
 			</tr>	
 			<tr>
 				<td>종류</td>
-				<td th:text="${stockDetail.mno.type}"></td>
+				<td th:text="${merchandiseDetail.type}"></td>
 			</tr>
 			<tr>
 				<td>매입가격</td>
-				<td th:text="${stockDetail.mno.buyprice}"></td>
+				<td th:text="${merchandiseDetail.buyprice}"></td>
 			</tr>
 			<tr>
 				<td>판매가격</td>
-				<td th:text="${stockDetail.mno.sellprice}"></td>
+				<td th:text="${merchandiseDetail.sellprice}"></td>
 			</tr>
 			<tr>
 				<td>회사</td>
-				<td th:text="${stockDetail.mno.company_name}"></td>
+				<td th:text="${merchandiseDetail.company_name}"></td>
 			</tr>
 			<tr>
 				<td>재고</td>
-				<td th:text="${stockDetail.amount}"></td>
+				<td th:text="${amount != null} ? ${amount} : '0'"></td>
 			</tr>
 		</tbody>
 	</table>
 	<form action="/admin/orderStock" method="post">
-		<input type="hidden" name="mno" th:value="${stockDetail.mno.mno}">
+		<input type="hidden" name="mno" th:value="${merchandiseDetail.mno}">
 		<input type="number" placeholder="주문 수량" name="amount" value="0">
 		<input type="submit" value="주문하기">
 	</form>

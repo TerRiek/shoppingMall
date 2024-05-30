@@ -19,6 +19,7 @@ import com.green.shoppingMall.domain.PurchaseDetail;
 import com.green.shoppingMall.domain.StockDetail;
 import com.green.shoppingMall.entity.Delivery;
 import com.green.shoppingMall.entity.User;
+import com.green.shoppingMall.repository.CartRepository;
 import com.green.shoppingMall.repository.DeliveryRepository;
 import com.green.shoppingMall.repository.UserRepository;
 
@@ -42,6 +43,9 @@ public class UserController {
 	
 	@Autowired
 	private DeliveryRepository deliveryRepository;
+	
+	@Autowired
+	private CartRepository cartRepository;
 	
 	@GetMapping("/loginForm")
 	public String loginForm() {
@@ -121,7 +125,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/indexMember")
-	public String indexMember(Model model) {
+	public String indexMember(Model model, HttpSession session) {
+		
+		if(session.getAttribute("member") != null) {
+			User user = (User)session.getAttribute("member");
+			int count = cartRepository.countByUno(user.getUno());
+			session.setAttribute("cartTotal", count);
+		}
 		
 		List<PurchaseDetail> popularList = purchaseDao.findGroupByMnoOrderByAmountDesc();
 		if(popularList.size() > 0) {
@@ -136,12 +146,51 @@ public class UserController {
 		return "/member/indexMember";
 	}
 	
-	@GetMapping("/detail")
-	public String detail(HttpSession session, Model model) {
+	@GetMapping("/detailMember")
+	public String detailMember(HttpSession session, Model model) {
 		User user = (User)session.getAttribute("member");
-		model.addAttribute("user", user);
+		if(user == null) {
+			return "redirect:/myerror";
+		}
+		model.addAttribute("member", user);
 		
-		return "";
+		return "/member/userDetail";
 	}
+	
+	@GetMapping("/detailAdmin")
+	public String detailAdmin(HttpSession session, Model model) {
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
+		model.addAttribute("admin", user);
+		
+		return "/member/userDetail";
+	}
+	
+	@PostMapping("/updateMember")
+	public String updateMember(User user, Model model, HttpSession session) {
+		
+		User userResult = (User)session.getAttribute("member");
+		Long uno = userResult.getUno();
+		userRepository.saveByUno(uno, user.getEmail(), user.getInternationalNumber(), user.getPassword(), user.getTelephone(), user.getUsername());
+		
+		model.addAttribute("msg", "정보 수정이 완료되었습니다");
+		model.addAttribute("url", "/user/detailMember");
+		return "/alert/alert";
+	}
+	
+	@PostMapping("/updateAdmin")
+	public String updateAdmin(User user, Model model, HttpSession session) {
+		
+		User userResult = (User)session.getAttribute("admin");
+		Long uno = userResult.getUno();
+		userRepository.saveByUno(uno, user.getEmail(), user.getInternationalNumber(), user.getPassword(), user.getTelephone(), user.getUsername());
+		
+		model.addAttribute("msg", "정보 수정이 완료되었습니다");
+		model.addAttribute("url", "/user/detailAdmin");
+		return "/alert/alert";
+	}
+	
 }
 

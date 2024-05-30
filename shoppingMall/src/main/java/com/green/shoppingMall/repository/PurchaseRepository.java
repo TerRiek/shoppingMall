@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.green.shoppingMall.entity.Delivery;
 import com.green.shoppingMall.entity.Purchase;
+import com.green.shoppingMall.entity.User;
 
 
 public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
@@ -20,4 +22,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	
 	@Query(value = "SELECT pno, SUM(amount) as amount, regdatetime, cno, dno, mno FROM purchase GROUP BY mno HAVING mno = :mno", nativeQuery = true)
 	Purchase findByMno(@Param("mno") Long mno);
+
+	public List<Purchase> findByDnoOrderByRegdatetimeDesc(Delivery dno);
 }

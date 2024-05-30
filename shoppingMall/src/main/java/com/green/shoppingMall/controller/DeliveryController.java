@@ -24,13 +24,19 @@ public class DeliveryController {
 	
 	@GetMapping("/manage")
 	public String manage(HttpSession session, Model model) {
+		
+
 		User user = (User)session.getAttribute("member");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 	
 		Delivery deliveryDetail = deliveryRepository.findByUno(user.getUno());
 		if(deliveryDetail == null) {
 			
 		}else {
 			model.addAttribute("deliveryDetail", deliveryDetail);
+			System.out.println(deliveryDetail);
 		}
 		
 		return "/member/deliveryDetail";

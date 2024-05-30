@@ -31,9 +31,8 @@ public class MyController {
 		
 		for(int i = 0; i < popularList.size(); i++) {
 			Long amount = stockDao.getAmount(popularList.get(i).getMno());
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
-			
 			popularList.get(i).setAmount(amount);
+			System.out.println("amount : " + popularList.get(i).getAmount());
 		}
 		
 		if(popularList.size() > 0) {
@@ -44,7 +43,6 @@ public class MyController {
 		if(recentList.size() > 0) {
 			model.addAttribute("recentList", recentList);
 		}
-
 		return "/member/indexMember";
 		
 	}

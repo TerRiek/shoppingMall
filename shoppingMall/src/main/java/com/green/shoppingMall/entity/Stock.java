@@ -2,6 +2,7 @@ package com.green.shoppingMall.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,12 +27,7 @@ public class Stock {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long sno;
 	
-	@ManyToOne
-	@JoinColumn(name = "uno")
-	@ToString.Exclude
-	private User uno;
-	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "mno")
 	@ToString.Exclude
 	private Merchandise mno;

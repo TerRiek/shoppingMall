@@ -15,4 +15,10 @@ public interface CartRepository extends JpaRepository<Cart, Long>{
 
 	@Query(value = "SELECT cno, SUM(amount) AS amount, mno, uno FROM cart WHERE uno = :uno GROUP BY mno;", nativeQuery = true)
 	List<Cart> findAllByUno(@Param("uno") Long uno);
+	
+	@Query(value = "SELECT COUNT(mno) FROM cart WHERE uno = :uno", nativeQuery = true)
+	int countByUno(@Param("uno") Long uno);
+	
+	@Query(value = "SELECT * FROM cart WHERE mno = :mno AND uno = :uno", nativeQuery = true)
+	public Cart findByMnoAndUno(@Param("mno")Long mno, @Param("uno")Long uno);
 }

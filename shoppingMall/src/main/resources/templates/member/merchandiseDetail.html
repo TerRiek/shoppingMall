@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
 <body>
 	<header>
 		<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
-	<h1>로그인</h1>
 	
 	<img alt="상품 사진" th:src="@{${merchandiseDetail.imgPath}}" onerror="this.src='/upload/noimage.png'">
+	<p th:text="${merchandiseDetail.name}"></p>
+	<p th:text="${merchandiseDetail.sellprice}"></p>
+	<p th:text="${merchandiseDetail.company_name}"></p>
+	<p th:text="${merchandiseDetail.type}"></p>
 	
 	
-	<input th:if="${session.member != null}" type="number" th:value="1" name="amount">
-	<input th:if="${session.member != null}" type="submit" value="장바구니 추가" th:onclick="addCart()">
-	<input th:if="${session.member != null}" type="button" value="바로구매" th:onclick="purchase()">
+	<input th:if="${session.member != null}" type="number" th:value="0" name="amount" th:disabled="${amount < 1} ? 'disabled'">
+	<input th:if="${session.member != null}" type="submit" value="장바구니 추가" th:onclick="addCart()" th:disabled="${amount < 1} ? 'disabled'">
+	<input th:if="${session.member != null}" type="button" value="바로구매" th:onclick="purchase()" th:disabled="${amount < 1} ? 'disabled'">
 	
 	<footer>
 		<th:block th:insert="~{/fragments/footer.html :: footer}">

@@ -5,10 +5,10 @@
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" />
 <style type="text/css">
-	ul li{
+	div ul li{
 		list-style: none;
 	}
-	ul{
+	div ul{
 		padding: 0;
 		border: 1px solid gray;
 		width: 200px;
@@ -29,16 +29,16 @@
 	<input type="checkbox" id="allChk" onclick="checkAll()">
 	<label for="allChk">전체선택</label>
 	<div id="cartBox">
-	<ul th:each="cart : ${cartList}">
+	<ul th:each="cart : ${cartList}" th:if="${cartList != null}">
 		<li><img alt="상품 사진" th:src="@{${cart.mno.imgPath}}"  onerror="this.src='/upload/noimage.png'"></li>
 		<li th:text="${cart.mno.name}"></li>
 		<li th:text="${cart.mno.sellprice}"></li>
-		<li><input type="number" th:value="${cart.amount}"></li>
+		<li><input type="number" name="amount" th:id="${cart.mno.mno}" th:value="${cart.amount}"></li>
 		<li><input type="checkbox" name="chk" onclick="uncheckAll()"></li>
 	</ul>
 	</div>
 	<input type="button" value="선택 삭제" id="${cart.mno}" onclick="deleteChecked()">
-	<input type="button" value="바로 구매" onclick="">
+	<input type="button" value="바로 구매" onclick="purchase()">
 
 	<footer>
 		<th:block th:insert="~{/fragments/footer.html :: footer}">
@@ -73,6 +73,12 @@
 			const str = JSON.stringify(checked);
 			console.log(str);
 		}
+		
+		function purchase(){
+			const chks = document.querySelectorAll("input[name='chk']:checked");
+			
+		}
+		
 	</script>
 </body>
 </html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="/loginProc" method="post">
+	<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> -->
+	<input type="text" name="username">
+	<input type="password" name="password">
+	<input type="submit" value="로그인">
+</form>
+</body>
+</html>

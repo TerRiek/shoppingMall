@@ -36,27 +36,52 @@ public class CartController {
 	public String list(HttpSession session, Model model) {
 		
 		User user = (User)session.getAttribute("member");
-		List<Cart> cartList = cartRepository.findAllByUno(user.getUno());
-		
-		for(int i = 0; i < cartList.size(); i++) {
+
+		if(user == null) {
+			return "redirect:/myerror";
 		}
 		
-		model.addAttribute("cartList", cartList);
+		List<Cart> cartList = cartRepository.findAllByUno(user.getUno());
+		
+		if(cartList.size() > 0) {
+			model.addAttribute("cartList", cartList);
+		}
+		
 		return "/member/cartList";
 	}
 	
 	@PostMapping("/add")
 	public @ResponseBody String add(@RequestBody Detail detail, HttpSession session, Model model) {
 		
-		System.out.println(detail);
 		
-		Cart cart = Cart.builder()
-				.amount(detail.getAmount())
-				.mno(merchandiseRepository.findByMno(detail.getMno()))
-				.uno((User)session.getAttribute("member"))
-				.build();
+		User user = (User)session.getAttribute("member");
+		
+		Cart cart = cartRepository.findByMnoAndUno(detail.getMno(), user.getUno());
+		
+		System.out.println(cart);
+		
+		if(cart != null) {
+			
+			cart.setCno(cart.getCno());
+			cart.setAmount(detail.getAmount());
+			cart.setUno(user);
+			cart.setMno(merchandiseRepository.findByMno(detail.getMno()));
+			
+			cartRepository.save(cart);
+		}else {
+			
+			Cart cart2 = new Cart();
+			
+			cart2.setAmount(detail.getAmount());
+			cart2.setUno(user);
+			cart2.setMno(merchandiseRepository.findByMno(detail.getMno()));
+			
+			cartRepository.save(cart2);
+		}
+		
+		
 				
-		cartRepository.save(cart);
+		
 		
 		return "장바구니에 추가되었습니다";
 	}

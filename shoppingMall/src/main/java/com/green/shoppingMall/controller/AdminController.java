@@ -56,22 +56,31 @@ public class AdminController {
 	private StockRepository stockRepository;
 	
 	@GetMapping("/indexAdmin")
-	public void indexAdmin(Model model) {
+	public String indexAdmin(Model model, HttpSession session) {
+		
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
 		List<Merchandise> list = merchandiseRepository.findAll();
 		if(list.size() > 0) {
 			model.addAttribute("list", list);
 		}
-
+		
+		return "/admin/indexAdmin";
 	}
 	
 	@GetMapping("/registMerchandiseForm")
 	public void registMerchandiseForm() {
 		
+		
+		
 	}
 	
 	@PostMapping("/registMerchandise")
 	public String registMerchandise(Merchandise merchandise, @RequestParam("file")MultipartFile file, HttpSession session, Model model) {
+		
 		
 		String fileRealName = file.getOriginalFilename(); //파일명을 얻어낼 수 있는 메서드!
 		long size = file.getSize(); //파일 사이즈
@@ -113,13 +122,7 @@ public class AdminController {
 		}
 		
 		merchandiseRepository.save(merchandise);
-		session.getAttribute("admin");
-		Stock stock = Stock.builder()
-				.amount(0L)
-				.uno((User)session.getAttribute("admin"))
-				.mno(merchandise)
-				.build();
-		stockRepository.save(stock);
+		
 		model.addAttribute("msg", "상품이 성공적으로 등록되었습니다");
 		model.addAttribute("url", "/admin/indexAdmin");
 		return "/alert/alert";
@@ -132,17 +135,30 @@ public class AdminController {
 	}
 	
 	@GetMapping("/merchandiseDetail")
-	public void merchandiseDetail(@RequestParam("mno") Long mno, Model model) {
+	public String merchandiseDetail(@RequestParam("mno") Long mno, Model model, HttpSession session) {
+		
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
 		System.out.println(merchandiseRepository.findByMno(mno).getImgPath());
 		
 		model.addAttribute("merchandiseDetail", merchandiseRepository.findByMno(mno));
+	
+		return "/admin/merchandiseDetail";
 	}
 	
 	@GetMapping("/updateForm")
-	public void updateForm(@RequestParam("mno") Long mno, Model model) {
+	public String updateForm(@RequestParam("mno") Long mno, Model model, HttpSession session) {
+		
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
 		model.addAttribute("merchandiseDetail", merchandiseRepository.findByMno(mno));
+		return "/admin/updateForm";
 	}
 	
 	@PostMapping("/update")
@@ -203,7 +219,12 @@ public class AdminController {
 	}
 	
 	@GetMapping("/delete")
-	public String delete(@RequestParam("mno") Long mno) {
+	public String delete(@RequestParam("mno") Long mno, HttpSession session) {
+		
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
 		cartRepository.deleteByMno(mno);
 		purchaseRepository.deleteByMno(mno);
@@ -215,7 +236,12 @@ public class AdminController {
 	}
 	
 	@GetMapping("/getStockList")
-	public String getStockList(Model model) {
+	public String getStockList(Model model, HttpSession session) {
+		
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
 		List<Stock> stockList = stockRepository.findAllOrderByAmountAsc();
 		List<Purchase> purchaseList = new ArrayList<>();
@@ -231,43 +257,50 @@ public class AdminController {
 	}
 	
 	@GetMapping("/orderStockForm")
-	public String orderStockForm(Model model, @RequestParam("mno") Long mno) {
+	public String orderStockForm(Model model, @RequestParam("mno") Long mno, HttpSession session) {
 		
-		log.info(stockRepository.findByMno(mno));
+		User user = (User)session.getAttribute("admin");
+		if(user == null) {
+			return "redirect:/myerror";
+		}
 		
-		model.addAttribute("stockDetail", stockRepository.findByMno(mno));
+		if(stockRepository.findByMno(mno) != null) {
+			model.addAttribute("amount", stockRepository.findByMno(mno).getAmount());
+		}
+		
+		model.addAttribute("merchandiseDetail", merchandiseRepository.findByMno(mno));
 		
 		return "/admin/stockDetail";
 	}
 	
 	@PostMapping("/orderStock")
-	public String orderStock(@RequestParam("mno") Long mno, @RequestParam(value = "amount", required = false) Long amount, HttpSession session, HttpServletResponse response) throws IOException {
-		response.setContentType("text/html; charset=utf-8");
-		PrintWriter out = response.getWriter();
+	public String orderStock(@RequestParam("mno") Long mno, @RequestParam(value = "amount", required = false) Long amount, HttpSession session, Model model) throws IOException {
 		
-		if(amount == null || amount < 1) {
+		Stock stock = stockRepository.findByMnos(mno);
+		
+		if(stock != null) {
 			
-				out.print("<script>alert('주문수량이 입력되지 않았습니다');</script>");
-				return "redirect:/admin/orderStockForm?mno=" + mno;
+			stock.setOrderdatetime(LocalDateTime.now());
+			stock.setAmount(stock.getAmount() + amount);
+			stock.setMno(merchandiseRepository.findByMno(mno));
+			stock.setSno(stock.getSno());
+			
+			stockRepository.save(stock);
 			
 		}else {
-		
-		User admin = (User)session.getAttribute("admin");
-		
-		Merchandise merchandise = merchandiseRepository.findByMno(mno);
-		
-		Stock stock = Stock.builder()
-				.amount(amount)
-				.mno(merchandise)
-				.uno(admin)
-				.orderdatetime(LocalDateTime.now())
-				.build();
-				
-		stockRepository.save(stock);
-		out.print("<script>alert('주문이 완료되었습니다');</script>");
-		
-		return "redirect:/admin/getStockList";
+			
+			Stock stock2 = new Stock();
+			stock2.setOrderdatetime(LocalDateTime.now());
+			stock2.setAmount(amount);
+			stock2.setMno(merchandiseRepository.findByMno(mno));
+			
+			stockRepository.save(stock2);
 		}
+		
+		model.addAttribute("msg", "주문이 완료되었습니다");
+		model.addAttribute("url", "/admin/getStockList");
+		
+		return "/alert/alert";
 	}
 	
 	

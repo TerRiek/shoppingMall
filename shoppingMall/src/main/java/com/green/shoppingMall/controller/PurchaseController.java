@@ -1,9 +1,12 @@
 package com.green.shoppingMall.controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.shoppingMall.domain.Detail;
 import com.green.shoppingMall.entity.Purchase;
+import com.green.shoppingMall.entity.Stock;
 import com.green.shoppingMall.entity.User;
 import com.green.shoppingMall.repository.DeliveryRepository;
 import com.green.shoppingMall.repository.MerchandiseRepository;
 import com.green.shoppingMall.repository.PurchaseRepository;
+import com.green.shoppingMall.repository.StockRepository;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +40,9 @@ public class PurchaseController {
 	@Autowired
 	private DeliveryRepository deliveryRepository;
 	
+	@Autowired
+	private StockRepository stockRepository;
+	
 	@PostMapping("/buy")
 	public @ResponseBody String purchase(@RequestBody Detail detail, HttpSession session) {
 		
@@ -45,10 +53,30 @@ public class PurchaseController {
 				.mno(merchandiseRepository.findByMno(detail.getMno()))
 				.dno(deliveryRepository.findByUno(user.getUno()))
 				.build();
+		Stock stockResult = stockRepository.findByMno(detail.getMno());
+		
+		Stock stock = Stock.builder()
+				.sno(stockResult.getSno())
+				.amount(stockResult.getAmount() - detail.getAmount())
+				.orderdatetime(LocalDateTime.now())
+				.mno(merchandiseRepository.findByMno(detail.getMno()))
+				.build();
+				
+		stockRepository.save(stock);
 		
 		System.out.println("purchase : " + purchase);
 		purchaseRepository.save(purchase);
 		
 		return "구매 완료 되었습니다";
+	}
+	
+	@GetMapping("/list")
+	public String list(HttpSession session, Model model) {
+		User user = (User)session.getAttribute("member");
+		
+		List<Purchase> purchaseList = purchaseRepository.findByDnoOrderByRegdatetimeDesc(deliveryRepository.findByUno(user.getUno()));
+		
+		model.addAttribute("purchaseList", purchaseList);
+		return "/member/purchaseList";
 	}
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+<style type="text/css">
+	form{
+		display: flex;
+		flex-direction: column;
+		margin: 0 auto;
+		width: 250px;
+	}
+	form input{
+		padding: 5px;
+		margin: 5px 0;
+	}
+	input[type="button"], input[type="submit"]{
+		background: #4a8df7;
+		color: white;
+	}
+</style>
+</head>
+<body>
+	<header>
+	<th:block th:insert="~{/fragments/header.html :: header}">
+	</header>
+	<h1>회원가입</h1>
+	<form action="/user/updateMember" method="post" th:if="${member != null}">
+		<input type="text" placeholder="아이디" name="username" th:value="${member.username}">
+		<input type="password" placeholder="비밀번호" name="password">
+		<input type="password" placeholder="비밀번호 확인">
+		<input type="email" placeholder="aaa@gmail.com" name="email" th:value="${member.email}">
+		<select name="internationalNumber">
+			<option value="+82">+82</option>
+		</select>
+		<input type="tel" placeholder="111-1111-1111" name="telephone" th:value="${member.telephone}">
+		<input type="button" value="인증번호 보내기">
+		<input type="text" placeholder="인증번호">
+		<input type="button" value="인증번호 확인">
+		<input type="submit" value="저장">
+		
+	</form>
+	
+	<form action="/user/updateAdmin" method="post" th:if="${admin != null}">
+		<input type="text" placeholder="아이디" name="username" th:value="${admin.username}">
+		<input type="password" placeholder="비밀번호" name="password">
+		<input type="password" placeholder="비밀번호 확인">
+		<input type="email" placeholder="aaa@gmail.com" name="email" th:value="${admin.email}">
+		<select name="internationalNumber">
+			<option value="+82">+82</option>
+		</select>
+		<input type="tel" placeholder="111-1111-1111" name="telephone" th:value="${admin.telephone}">
+		<input type="button" value="인증번호 보내기">
+		<input type="text" placeholder="인증번호">
+		<input type="button" value="인증번호 확인">
+		<input type="submit" value="저장">
+		
+	</form>
+	
+	<footer>
+	<th:block th:insert="~{/fragments/footer.html :: footer}">
+	</footer>
+</body>
+</html>
