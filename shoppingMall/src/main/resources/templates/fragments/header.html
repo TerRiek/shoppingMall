@@ -5,39 +5,49 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
+
 	<header th:fragment="header">
 		<th:block th:if="${session.member == null && session.admin == null}">
-		<a th:href="@{/user/loginForm}">로그인</a>
-		<a th:href="@{/user/registForm}">회원가입</a>
+			<h1>
+				<a th:href="@{/user/indexMember}">쇼핑몰</a>
+			</h1>
+			<a th:href="@{/user/loginForm}">로그인</a>
+			<a th:href="@{/user/registForm}">회원가입</a>
 		</th:block>
 		<th:block th:if="${session.member != null}">
-		<nav>
-			<ul>
-				<li><a th:href="@{/user/indexMember}">홈으로</a></li>
-				<li><a th:href="@{/merchandise/list}">전체 조회</a></li>
-				<li><a th:href="@{/cart/list}">장바구니 보러 가기([[${session.cartTotal}]])</a></li>
-				<li><a th:href="@{/delivery/manage}">배송지 설정하기</a></li>
-				<li><a th:href="@{/purchase/list}">구매 내역</a></li>
-				<li><a th:href="@{/user/detailMember}">[[${session.member.username}]]님 환영합니다.</a></li>
-				<li><a th:href="@{/user/logout}">로그아웃</a></li>
-			</ul>		
-		</nav>
-		
+			<h1>
+				<a th:href="@{/user/indexMember}">쇼핑몰</a>
+			</h1>
+			<nav>
+				<ul>
+					<li><a th:href="@{/cart/list}">장바구니 보러
+							가기([[${session.cartTotal}]])</a></li>
+					<li><a th:href="@{/delivery/manage}">배송지 설정하기</a></li>
+					<li><a th:href="@{/purchase/list}">구매 내역</a></li>
+					<li><a th:href="@{/user/detailMember}">[[${session.member.username}]]님
+							환영합니다.</a></li>
+					<li><a th:href="@{/user/logout}">로그아웃</a></li>
+				</ul>
+			</nav>
+
 		</th:block>
 		<th:block th:if="${session.admin != null}">
-		<nav>
-			<ul>
-				<li><a th:href="@{/admin/indexAdmin}">상품 조회</a></li>
-				<li><a th:href="@{/admin/registMerchandiseForm}">상품 등록</a></li>
-				<li><a th:href="@{/admin/getStockList}">재고 조회</a></li>
-				<li><a th:href="@{/user/detailAdmin}">[[${session.admin.username}]]님 환영합니다.</a></li>
-				<li><a th:href="@{/user/logout}">로그아웃</a></li>
-			</ul>		
-		</nav>
+			<h1>
+				<a th:href="@{/user/indexMember}">쇼핑몰</a>
+			</h1>
+			<nav>
+				<ul>
+					<li><a th:href="@{/admin/indexAdmin}">상품 조회</a></li>
+					<li><a th:href="@{/admin/registMerchandiseForm}">상품 등록</a></li>
+					<li><a th:href="@{/admin/getStockList}">재고 조회</a></li>
+					<li><a th:href="@{/user/detailAdmin}">[[${session.admin.username}]]님
+							환영합니다.</a></li>
+					<li><a th:href="@{/user/logout}">로그아웃</a></li>
+				</ul>
+			</nav>
 		</th:block>
 	</header>
-	
+
 </body>
 </html>
 

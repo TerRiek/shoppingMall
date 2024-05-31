@@ -1,5 +1,6 @@
 package com.green.shoppingMall.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.shoppingMall.domain.Detail;
 import com.green.shoppingMall.entity.Cart;
+import com.green.shoppingMall.entity.Purchase;
 import com.green.shoppingMall.entity.Stock;
 import com.green.shoppingMall.entity.User;
 import com.green.shoppingMall.repository.CartRepository;
@@ -36,10 +38,11 @@ public class CartController {
 	public String list(HttpSession session, Model model) {
 		
 		User user = (User)session.getAttribute("member");
-
+		
 		if(user == null) {
 			return "redirect:/myerror";
 		}
+		session.setAttribute("cartTotal", cartRepository.countByUno(user.getUno()));
 		
 		List<Cart> cartList = cartRepository.findAllByUno(user.getUno());
 		
@@ -79,10 +82,25 @@ public class CartController {
 			cartRepository.save(cart2);
 		}
 		
-		
-				
-		
-		
 		return "장바구니에 추가되었습니다";
+	}
+	
+	@PostMapping("/delete")
+	public @ResponseBody String buyList(@RequestBody List<Detail> detail, HttpSession session) {
+		
+		if(detail.isEmpty()) {
+			return "";
+		}
+		
+		User user = (User)session.getAttribute("member");
+		
+		detail.forEach(e ->{
+
+			Cart cart = cartRepository.findByMnoAndUno(e.getMno(), user.getUno());
+			cartRepository.delete(cart);
+		
+		});
+		
+		return "장바구니에서 제거했습니다.";
 	}
 }

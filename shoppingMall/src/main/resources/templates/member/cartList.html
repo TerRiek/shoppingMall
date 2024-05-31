@@ -5,21 +5,22 @@
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" />
 <style type="text/css">
-	div ul li{
-		list-style: none;
-	}
-	div ul{
-		padding: 0;
-		border: 1px solid gray;
-		width: 200px;
-		margin: 10px;
-	}
-	#cartBox{
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-	}
-	
+div ul li {
+	list-style: none;
+}
+
+div ul {
+	padding: 0;
+	border: 1px solid gray;
+	width: 200px;
+	margin: 10px;
+}
+
+#cartBox {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
 </style>
 </head>
 <body>
@@ -29,15 +30,20 @@
 	<input type="checkbox" id="allChk" onclick="checkAll()">
 	<label for="allChk">전체선택</label>
 	<div id="cartBox">
-	<ul th:each="cart : ${cartList}" th:if="${cartList != null}">
-		<li><img alt="상품 사진" th:src="@{${cart.mno.imgPath}}"  onerror="this.src='/upload/noimage.png'"></li>
-		<li th:text="${cart.mno.name}"></li>
-		<li th:text="${cart.mno.sellprice}"></li>
-		<li><input type="number" name="amount" th:id="${cart.mno.mno}" th:value="${cart.amount}"></li>
-		<li><input type="checkbox" name="chk" onclick="uncheckAll()"></li>
-	</ul>
+		<ul th:each="cart : ${cartList}" th:if="${cartList != null}">
+			<li><img alt="상품 사진" th:src="@{${cart.mno.imgPath}}"
+				onerror="this.src='/upload/noimage.png'"></li>
+			<li th:text="${cart.mno.name}"></li>
+			<li th:text="${cart.mno.sellprice}"></li>
+			<li><input type="number" name="amount"
+				th:id="'amount_' + ${cart.mno.mno}" th:value="${cart.amount}"></li>
+
+			<li><input type="checkbox" name="chk"
+				th:id="'chk_' + ${cart.mno.mno}" onclick="uncheckAll()"></li>
+		</ul>
 	</div>
-	<input type="button" value="선택 삭제" id="${cart.mno}" onclick="deleteChecked()">
+	<input type="button" value="선택 삭제" id="${cart.mno}"
+		onclick="deleteChecked()">
 	<input type="button" value="바로 구매" onclick="purchase()">
 
 	<footer>
@@ -45,7 +51,7 @@
 	</footer>
 	<script type="text/javascript">
 		function checkAll(){
-			const chks = document.querySelectorAll("input[type='checkbox']");
+			const chks = document.querySelectorAll("input[type=checkbox]");
 			chks.forEach(e =>{
 				const allChk = document.querySelector("#allChk");
 				if(allChk.checked === true){
@@ -68,16 +74,60 @@
 		}
 		
 		function deleteChecked(){
-			const checked = document.querySelectorAll("input[name='chk']:checked");
+			const chks = document.querySelectorAll("input[name='chk']:checked");
+			const dataList = new Array();
+			chks.forEach(e =>{
+
+				const data = {
+					mno : e.id.substring(4, e.id.length),
+				};
+
+				dataList.push(data);
+				
+			})	
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function(){
+				if(this.responseText !== ""){
+					alert(this.responseText);
+					location.href="/cart/list";
+				}
+			}
 			
-			const str = JSON.stringify(checked);
-			console.log(str);
+			console.log(JSON.stringify(dataList));
+			
+			xhr.open("POST", "/cart/delete", true);
+			xhr.setRequestHeader("Content-type","application/json");
+			xhr.send(JSON.stringify(dataList));
 		}
 		
 		function purchase(){
 			const chks = document.querySelectorAll("input[name='chk']:checked");
+			const dataList = new Array();
+			chks.forEach(e =>{
+				const amount = document.querySelector("#amount_" + e.id.substring(4, e.id.length));
+
+				const data = {
+					mno : e.id.substring(4, e.id.length),
+					amount : amount.value
+				};
+				dataList.push(data);
+				
+			})	
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function(){
+				if(this.responseText !== ""){
+					alert(this.responseText);
+					location.href="/purchase/list";
+				}
+			}
 			
+			console.log(JSON.stringify(dataList));
+			
+			xhr.open("POST", "/purchase/buyList", true);
+			xhr.setRequestHeader("Content-type","application/json");
+			xhr.send(JSON.stringify(dataList));
 		}
+		
 		
 	</script>
 </body>

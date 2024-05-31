@@ -5,18 +5,26 @@
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" />
 <style type="text/css">
-	tr:hover{
-		cursor: pointer;
-	}
+tr:hover {
+	cursor: pointer;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: fit-content;
+}
 </style>
 </head>
 <body>
 
-<header>
+	<header>
 		<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
-	
-	<table border="1">
+	<p th:if="${purchaseList == null}" th:text="'구매 내역이 없습니다.'"
+		style="color: red; text-align: center;"></p>
+
+	<table border="1" th:if="${purchaseList != null}">
 		<thead>
 			<tr>
 				<th>이미지</th>
@@ -27,16 +35,18 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="purchase : ${purchaseList}" th:onclick="|location.href='@{/merchandise/detail(mno=${purchase.mno.mno})}'|">
-				<td><img alt="" th:src="@{${purchase.mno.imgPath}}" onerror="this.src='/upload/noimage.png'"></td>
-				<td th:text="${purchase.mno.name}" ></td>
-				<td th:text="${purchase.amount}"></td>
-				<td th:text="${purchase.mno.sellprice}"></td>
+			<tr th:each="purchase : ${purchaseList}"
+				th:onclick="|location.href='@{/merchandise/detail(mno=${purchase.sno.mno.mno})}'|">
+				<td><img alt="" th:src="@{${purchase.sno.mno.imgPath}}"
+					onerror="this.src='/upload/noimage.png'"></td>
+				<td th:text="${purchase.sno.mno.name}"></td>
+				<td th:text="${purchase.pamount}"></td>
+				<td th:text="${purchase.sno.mno.sellprice}"></td>
 				<td th:text="${purchase.regdatetime}"></td>
 			</tr>
 		</tbody>
 	</table>
-	
+
 	<footer>
 		<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>

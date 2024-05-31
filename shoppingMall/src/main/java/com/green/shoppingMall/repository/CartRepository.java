@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.green.shoppingMall.entity.Cart;
+import com.green.shoppingMall.entity.Merchandise;
+import com.green.shoppingMall.entity.User;
 
 public interface CartRepository extends JpaRepository<Cart, Long>{
 
@@ -21,4 +23,5 @@ public interface CartRepository extends JpaRepository<Cart, Long>{
 	
 	@Query(value = "SELECT * FROM cart WHERE mno = :mno AND uno = :uno", nativeQuery = true)
 	public Cart findByMnoAndUno(@Param("mno")Long mno, @Param("uno")Long uno);
+
 }

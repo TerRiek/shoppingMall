@@ -11,7 +11,14 @@ import com.green.shoppingMall.dao.IPurchaseDAO;
 import com.green.shoppingMall.dao.IStockDAO;
 import com.green.shoppingMall.domain.PurchaseDetail;
 import com.green.shoppingMall.domain.StockDetail;
+import com.green.shoppingMall.entity.Purchase;
+import com.green.shoppingMall.entity.Stock;
+import com.green.shoppingMall.entity.User;
+import com.green.shoppingMall.repository.CartRepository;
+import com.green.shoppingMall.repository.PurchaseRepository;
+import com.green.shoppingMall.repository.StockRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
@@ -24,26 +31,37 @@ public class MyController {
 	@Autowired
 	private IStockDAO stockDao;
 	
+	@Autowired
+	private PurchaseRepository purchaseRepository;
+	
+	@Autowired
+	private StockRepository stockRepository;
+	
+	@Autowired
+	private CartRepository cartRepository;
+	
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model, HttpSession session) {
 		
-		List<PurchaseDetail> popularList = purchaseDao.findGroupByMnoOrderByAmountDesc();
+		List<Purchase> popularList = purchaseRepository.findAllGroupByAmountAllOrderByAmountDesc();
 		
-		for(int i = 0; i < popularList.size(); i++) {
-			Long amount = stockDao.getAmount(popularList.get(i).getMno());
-			popularList.get(i).setAmount(amount);
-			System.out.println("amount : " + popularList.get(i).getAmount());
-		}
 		
 		if(popularList.size() > 0) {
 			model.addAttribute("popularList", popularList);
 		}
 		
-		List<StockDetail> recentList = stockDao.findOrderByOrderdatetimeDesc();
+		List<Stock> recentList = stockRepository.findOrderByOrderdatetimeDesc();
+		
 		if(recentList.size() > 0) {
 			model.addAttribute("recentList", recentList);
 		}
+		if(stockRepository.findAll().size() > 0) {
+		
+		model.addAttribute("stockList", stockRepository.findAll());
+		}
+
 		return "/member/indexMember";
+		
 		
 	}
 }

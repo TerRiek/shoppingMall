@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html>
+<html xmlns:sec="http://www.springframework.org/security/tags">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -10,5 +11,9 @@
 <p>[[${username}]]</p>
 <p>[[${name}]]</p>
 <p>[[${role}]]</p>
+<hr>
+<p>Welcome, <span sec:authentication="name"></span>!</p>
+<p>Welcome, <span sec:authentication="principal.name"></span>!</p>
+<p>Welcome, <span sec:authentication="principal.role"></span>!</p>
 </body>
 </html>

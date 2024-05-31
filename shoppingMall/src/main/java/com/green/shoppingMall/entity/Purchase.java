@@ -28,20 +28,15 @@ public class Purchase {
 	private Long pno;
 	
 	@ManyToOne
-	@JoinColumn(name = "mno")
+	@JoinColumn(name = "sno")
 	@ToString.Exclude
-	private Merchandise mno;
+	private Stock sno;
 	
 	@ManyToOne
 	@JoinColumn(name = "dno")
 	@ToString.Exclude
 	private Delivery dno;
 
-	@ManyToOne
-	@JoinColumn(name = "cno")
-	@ToString.Exclude
-	private Cart cno;
-	
-	private Long amount;
+	private Long pamount;
 	private LocalDateTime regdatetime;
 }

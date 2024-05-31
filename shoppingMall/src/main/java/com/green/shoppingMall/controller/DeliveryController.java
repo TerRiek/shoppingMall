@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.green.shoppingMall.entity.Delivery;
 import com.green.shoppingMall.entity.User;
+import com.green.shoppingMall.repository.CartRepository;
 import com.green.shoppingMall.repository.DeliveryRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,9 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/delivery")
 public class DeliveryController {
 
+	@Autowired
+	private CartRepository cartRepository;
+	
 	@Autowired
 	private DeliveryRepository deliveryRepository;
 	
@@ -32,12 +36,13 @@ public class DeliveryController {
 		}
 	
 		Delivery deliveryDetail = deliveryRepository.findByUno(user.getUno());
-		if(deliveryDetail == null) {
+		if(deliveryDetail.getAddress1() == null) {
 			
 		}else {
 			model.addAttribute("deliveryDetail", deliveryDetail);
-			System.out.println(deliveryDetail);
 		}
+		
+		session.setAttribute("cartTotal", cartRepository.countByUno(user.getUno()));
 		
 		return "/member/deliveryDetail";
 	}
@@ -49,8 +54,13 @@ public class DeliveryController {
 		
 		Delivery deliveryDetail = deliveryRepository.findByUno(user.getUno());
 		
-		delivery.setUno(user);
-		deliveryRepository.save(delivery);
+		deliveryDetail.setDno(deliveryDetail.getDno());
+		deliveryDetail.setAddress1(delivery.getAddress1());
+		deliveryDetail.setAddress2(delivery.getAddress2());
+		deliveryDetail.setName(delivery.getName());
+		deliveryDetail.setTelephone(delivery.getTelephone());
+		deliveryDetail.setUno(user);
+		deliveryRepository.save(deliveryDetail);
 		
 		model.addAttribute("msg", "배송지가 성공적으로 저장되었습니다");
 		model.addAttribute("url", "/user/indexMember");

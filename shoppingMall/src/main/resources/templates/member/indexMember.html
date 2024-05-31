@@ -5,57 +5,83 @@
 <title>Insert title here</title>
 <link th:href="@{/css/style.css}" rel="stylesheet" />
 <style type="text/css">
-	div ul li{
-		list-style: none;
-	}
-	div ul{
-		margin: 0 10px;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		border: 1px solid black;
-	}
-	ul:hover{
-		cursor: pointer;
-	}
-	#popular{
-		margin-bottom: 20px;
-		display: flex;
-		flex-direction: row;
-		justify-content: left;
-	}
-	#recent{
-		display: flex;
-		flex-direction: row;
-		justify-content: left;
-	}
+div ul li {
+	list-style: none;
+}
+
+div ul {
+	margin: 0 10px;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+}
+
+ul:hover {
+	cursor: pointer;
+}
+
+#popular {
+	margin: 20px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+}
+
+#recent {
+	margin: 20px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+}
+
+#stock {
+	margin: 20px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+}
 </style>
 </head>
 <body>
 	<header>
-	<th:block th:insert="~{/fragments/header.html :: header}">
+		<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
-	
-	<h1>Index</h1>
+
 	<div id="popular">
-	<ul class="populars" th:each="popular : ${popularList}" th:onclick="|location.href='@{/merchandise/detail(mno=${popular.mno})}'|">
-		<li><img alt="상품 사진" th:src="@{${popular.imgPath}}" onerror="this.src='/upload/noimage.png'"></li>
-		<li th:text="${popular.name}"></li>			
-		<li th:text="${popular.sellprice}"></li>
-		<li th:text="${popular.amount > 0} ? ${popular.amount} : '재고없음'"></li>
-	</ul>
+		<ul class="populars" th:each="popular : ${popularList}"
+			th:onclick="|location.href='@{/merchandise/detail(mno=${popular.sno.mno.mno})}'|">
+			<li><img alt="상품 사진" th:src="@{${popular.sno.mno.imgPath}}"
+				onerror="this.src='/upload/noimage.png'"></li>
+			<li th:text="${popular.sno.mno.name}"></li>
+			<li th:text="${popular.sno.mno.sellprice}"></li>
+			<li
+				th:text="${popular.sno.amount > 0} ? ${popular.sno.amount} : '재고없음'"></li>
+		</ul>
 	</div>
 	<div id="recent">
-	<ul class="recents" th:each="recent : ${recentList}" th:onclick="|location.href='@{/merchandise/detail(mno=${recent.mno})}'|">
-		<li><img alt="상품 사진" th:src="@{${recent.imgPath}}" onerror="this.src='/upload/noimage.png'"></li>
-		<li th:text="${recent.name}"></li>			
-		<li th:text="${recent.sellprice}"></li>
-		<li th:text="${recent.amount > 0} ? ${recent.amount} : '재고없음'"></li>
-	</ul>
+		<ul class="recents" th:each="recent : ${recentList}"
+			th:onclick="|location.href='@{/merchandise/detail(mno=${recent.mno.mno})}'|">
+			<li><img alt="상품 사진" th:src="@{${recent.mno.imgPath}}"
+				onerror="this.src='/upload/noimage.png'"></li>
+			<li th:text="${recent.mno.name}"></li>
+			<li th:text="${recent.mno.sellprice}"></li>
+			<li th:text="${recent.amount > 0} ? ${recent.amount} : '재고없음'"></li>
+		</ul>
 	</div>
-	
+	<div id="stock">
+		<ul class="stocks" th:each="stock : ${stockList}"
+			th:onclick="|location.href='@{/merchandise/detail(mno=${stock.mno.mno})}'|">
+			<li><img alt="상품 사진" th:src="@{${stock.mno.imgPath}}"
+				onerror="this.src='/upload/noimage.png'"></li>
+			<li th:text="${stock.mno.name}"></li>
+			<li th:text="${stock.mno.sellprice}"></li>
+			<li th:text="${stock.amount > 0} ? ${stock.amount} : '재고없음'"></li>
+		</ul>
+	</div>
+
 	<footer>
-	<th:block th:insert="~{/fragments/footer.html :: footer}">
+		<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>
 </body>
 </html>

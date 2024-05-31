@@ -18,9 +18,13 @@ import com.green.shoppingMall.dao.IStockDAO;
 import com.green.shoppingMall.domain.PurchaseDetail;
 import com.green.shoppingMall.domain.StockDetail;
 import com.green.shoppingMall.entity.Delivery;
+import com.green.shoppingMall.entity.Purchase;
+import com.green.shoppingMall.entity.Stock;
 import com.green.shoppingMall.entity.User;
 import com.green.shoppingMall.repository.CartRepository;
 import com.green.shoppingMall.repository.DeliveryRepository;
+import com.green.shoppingMall.repository.PurchaseRepository;
+import com.green.shoppingMall.repository.StockRepository;
 import com.green.shoppingMall.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,6 +51,12 @@ public class UserController {
 	@Autowired
 	private CartRepository cartRepository;
 	
+	@Autowired
+	private PurchaseRepository purchaseRepository;
+	
+	@Autowired
+	private StockRepository stockRepository;
+
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/member/loginForm";
@@ -98,9 +108,10 @@ public class UserController {
 			return "/alert/alert";
 		} else if(userResult.getRole().equals("ROLE_MEMBER")) {
 			
-			session.setAttribute("delivery", deliveryRepository.findByUno(userResult.getUno()));
-			
 			session.setAttribute("member", userResult);
+			
+			User user2 = (User)session.getAttribute("member");
+			session.setAttribute("cartTotal", cartRepository.countByUno(user2.getUno()));
 			
 			model.addAttribute("msg", "개인회원 로그인 성공했습니다.");
 			model.addAttribute("url", "/user/indexMember");
@@ -127,22 +138,26 @@ public class UserController {
 	@GetMapping("/indexMember")
 	public String indexMember(Model model, HttpSession session) {
 		
-		if(session.getAttribute("member") != null) {
-			User user = (User)session.getAttribute("member");
-			int count = cartRepository.countByUno(user.getUno());
-			session.setAttribute("cartTotal", count);
-		}
+List<Purchase> popularList = purchaseRepository.findAllGroupByAmountAllOrderByAmountDesc();
 		
-		List<PurchaseDetail> popularList = purchaseDao.findGroupByMnoOrderByAmountDesc();
 		if(popularList.size() > 0) {
 			model.addAttribute("popularList", popularList);
+			System.out.println(popularList);
 		}
 		
-		List<StockDetail> recentList = stockDao.findOrderByOrderdatetimeDesc();
+		List<Stock> recentList = stockRepository.findOrderByOrderdatetimeDesc();
+		System.out.println(recentList);
+		
 		if(recentList.size() > 0) {
 			model.addAttribute("recentList", recentList);
 		}
+		if(stockRepository.findAll().size() > 0) {
 		
+			
+			
+		model.addAttribute("stockList", stockRepository.findAll());
+		}
+
 		return "/member/indexMember";
 	}
 	
@@ -153,6 +168,8 @@ public class UserController {
 			return "redirect:/myerror";
 		}
 		model.addAttribute("member", user);
+		
+		session.setAttribute("cartTotal", cartRepository.countByUno(user.getUno()));
 		
 		return "/member/userDetail";
 	}

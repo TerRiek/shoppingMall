@@ -6,27 +6,61 @@
 <link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
 <body>
-<header>
+	<header>
 		<th:block th:insert="~{/fragments/header.html :: header}">
 	</header>
 
-	<form action="/delivery/save" method="post" th:if="${deliveryDetail != null}">
-		<input type="text" name="telephone" th:value="${deliveryDetail.telephone}">
-		<input type="text" name="name" th:value="${deliveryDetail.name}">
-		<input type="text" name="address1" th:value="${deliveryDetail.address1}">
-		<input type="text" name="address2" th:value="${deliveryDetail.address2}">
-		<input type="submit" th:value="수정">
+	<form action="/delivery/save" method="post"
+		th:if="${deliveryDetail != null}">
+		<input type="text" name="name" th:value="${deliveryDetail.name}"><br>
+		<input type="text" name="telephone"
+			th:value="${deliveryDetail.telephone}"><br> <input
+			type="text" name="address1" th:value="${deliveryDetail.address1}"><br>
+		<input type="text" name="address2"
+			th:value="${deliveryDetail.address2}"><br> <input
+			type="submit" th:value="수정" onclick="return checkNull()"><br>
 	</form>
-	<form action="/delivery/save" method="post" th:if="${deliveryDetail == null}">
-		<input type="text" name="name" placeholder="수취인">
-		<input type="text" name="telephone" placeholder="연락처">
-		<input type="text" name="address1" placeholder="상세주소1">
-		<input type="text" name="address2" placeholder="상세주소2">
-		<input type="submit" th:value="저장">
+	<form action="/delivery/save" method="post"
+		th:if="${deliveryDetail == null}">
+		<input type="text" name="name" placeholder="수취인"><br> <input
+			type="text" name="telephone" placeholder="연락처"><br> <input
+			type="text" name="address1" placeholder="상세주소1"><br> <input
+			type="text" name="address2" placeholder="상세주소2"><br> <input
+			type="submit" th:value="저장" onclick="return checkNull()"><br>
 	</form>
-	
+
 	<footer>
 		<th:block th:insert="~{/fragments/footer.html :: footer}">
 	</footer>
+
+	<script type="text/javascript">
+		function checkNull() {
+			const name = document.querySelector("input[name='name']");
+			if (name.value === "") {
+				alert("수취인 이름이 입력되지 않았습니다");
+				name.focus();
+				return false;
+			}
+			const telephone = document.querySelector("input[name='telephone']");
+			if (telephone.value === "") {
+				alert("전화번호가 입력되지 않았습니다");
+				telephone.focus();
+				return false;
+			}
+			const address1 = document.querySelector("input[name='address1']");
+			if (address1.value === "") {
+				alert("상세주소1이 입력되지 않았습니다");
+				address1.focus();
+				return false;
+			}
+			const address2 = document.querySelector("input[name='address2']");
+			if (address2.value === "") {
+				alert("상세주소2가 이름이 입력되지 않았습니다");
+				address2.focus();
+				return false;
+			}
+			return true;
+		}
+	</script>
 </body>
 </html>

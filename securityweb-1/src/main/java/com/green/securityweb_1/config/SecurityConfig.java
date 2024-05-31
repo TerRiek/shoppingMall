@@ -20,6 +20,14 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		
+		/* JPA 와 JSP를 동시에 사용할때 anyRequest().permitAll() 순서를 맨 아래로 내린다.
+		 * http.authorizeHttpRequests(auth -> auth
+		 * 			.requestMatchers("/member/**").authenticated()
+		 * 			.requestMatchers("/admin/**").authenticated()
+		 * 			.anyRequest().permitAll()
+		 * 			);
+		 * */
+		
 		http.authorizeHttpRequests((auth) -> auth // 권한을 부여하는 역할
 				.requestMatchers("/", "/registForm", "/registProc").permitAll() // 모든 권한을 허용한다.(제한이 없다.)
 				.requestMatchers("/members/**").hasAnyRole("ADMIN", "MEMBER")
